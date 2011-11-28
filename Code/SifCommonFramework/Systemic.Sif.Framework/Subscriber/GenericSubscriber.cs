@@ -102,9 +102,10 @@ namespace Systemic.Sif.Framework.Subscriber
         /// <code>query.addCondition( LearnerDTD.LEARNERPERSONAL_UPN, ComparisonOperators.LE, "M830540004340" );</code>
         /// </summary>
         /// <param name="query">SIF Query to modify.</param>
-        protected virtual void AddToBroadcastRequestQuery(Query query)
+        /// <param name="zone">Zone that the request will be made to.</param>
+        protected virtual void AddToBroadcastRequestQuery(Query query, IZone zone)
         {
-        }  
+        }
 
         /// <summary>
         /// This method can be overwritten to specify further query conditions for synchronisation. The Query
@@ -113,7 +114,8 @@ namespace Systemic.Sif.Framework.Subscriber
         /// <code>query.addCondition( LearnerDTD.LEARNERPERSONAL_UPN, ComparisonOperators.LE, "M830540004340" );</code>
         /// </summary>
         /// <param name="query">SIF Query to modify.</param>
-        protected virtual void AddToSyncQuery(Query query)
+        /// <param name="zone">Zone that the request will be made to.</param>
+        protected virtual void AddToSyncQuery(Query query, IZone zone)
         {
         }
 
@@ -135,7 +137,7 @@ namespace Systemic.Sif.Framework.Subscriber
                 // Without this, an error occurs.
                 query.SifVersions = new SifVersion[] { AgentConfiguration.Version };
                 // Add any query conditions you may have.
-                AddToBroadcastRequestQuery(query);
+                AddToBroadcastRequestQuery(query, zone);
                 zone.Query(query);
             }
 
@@ -299,7 +301,7 @@ namespace Systemic.Sif.Framework.Subscriber
             // Without this, an error occurs.
             query.SifVersions = new SifVersion[] { AgentConfiguration.Version };
             // Add any query conditions you may have.
-            AddToSyncQuery(query);
+            AddToSyncQuery(query, zone);
             zone.Query(query);
         }
 
