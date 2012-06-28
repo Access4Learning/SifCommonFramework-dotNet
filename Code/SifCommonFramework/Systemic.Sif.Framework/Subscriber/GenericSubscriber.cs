@@ -14,9 +14,9 @@
 */
 
 using System.Timers;
-using Edustructures.SifWorks;
-using Edustructures.SifWorks.Infra;
-using Edustructures.SifWorks.Tools.Cfg;
+using OpenADK.Library;
+using OpenADK.Library.Infra;
+using OpenADK.Library.Tools.Cfg;
 using Systemic.Sif.Framework.Model;
 
 namespace Systemic.Sif.Framework.Subscriber

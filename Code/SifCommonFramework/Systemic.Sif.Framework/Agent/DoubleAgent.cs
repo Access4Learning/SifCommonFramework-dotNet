@@ -16,7 +16,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Edustructures.SifWorks;
+using OpenADK.Library;
 using Systemic.Sif.Framework.Publisher;
 using Systemic.Sif.Framework.Subscriber;
 

@@ -15,9 +15,9 @@
 
 using System;
 using System.IO;
-using Edustructures.SifWorks;
-using Edustructures.SifWorks.Tools.Cfg;
-using Edustructures.Util;
+using OpenADK.Library;
+using OpenADK.Library.Tools.Cfg;
+using OpenADK.Util;
 
 namespace Systemic.Sif.Framework.Agent
 {
@@ -25,7 +25,7 @@ namespace Systemic.Sif.Framework.Agent
     /// <summary>
     /// SIF Agent for managing Publishers and Subscribers.
     /// </summary>
-    public abstract class BaseAgent : Edustructures.SifWorks.Agent
+    public abstract class BaseAgent : OpenADK.Library.Agent
     {
         // Create a logger for use in this class.
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);

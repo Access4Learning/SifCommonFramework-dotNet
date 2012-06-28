@@ -16,9 +16,8 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Edustructures.SifWorks;
-using Edustructures.SifWorks.Tools.Mapping;
-using Edustructures.Util;
+using OpenADK.Library;
+using OpenADK.Library.Tools.Mapping;
 using Systemic.Sif.Framework.Agent;
 using Systemic.Sif.Framework.Publisher;
 

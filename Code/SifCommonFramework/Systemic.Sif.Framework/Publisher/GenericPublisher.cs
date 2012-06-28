@@ -15,8 +15,8 @@
 
 using System;
 using System.Timers;
-using Edustructures.SifWorks;
-using Edustructures.SifWorks.Tools.Cfg;
+using OpenADK.Library;
+using OpenADK.Library.Tools.Cfg;
 using Systemic.Sif.Framework.Model;
 
 namespace Systemic.Sif.Framework.Publisher
