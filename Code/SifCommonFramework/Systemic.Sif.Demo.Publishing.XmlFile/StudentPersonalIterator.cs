@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright 2010-2011 Systemic Pty Ltd
+* Copyright 2010-2013 Systemic Pty Ltd
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
 * See the License for the specific language governing permissions and limitations under the License.
 */
 
+using System;
 using OpenADK.Library;
 using OpenADK.Library.au.Student;
 using OpenADK.Library.Tools.Cfg;
@@ -24,37 +25,61 @@ namespace Systemic.Sif.Demo.Publishing.XmlFile
 {
 
     /// <summary>
-    /// This implementation simply works off an XML string read from a file (SIFWorks ADK configuration file).
+    /// This implementation simply works off an XML string read from a file (Agent configuration file).
     /// </summary>
-    public class XmlFileIterator : ISifEventIterator<StudentPersonal>, ISifResponseIterator<StudentPersonal>
+    public class StudentPersonalIterator : ISifEventIterator<StudentPersonal>, ISifResponseIterator<StudentPersonal>
     {
         // Create a logger for use in this class.
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        private int eventCount = 0;
+        private static int eventMessageCount = 0;
+
+        private bool onceOnly = true;
+        private int responseMessageCount = 0;
         private ObjectMapping objectMapping;
-        private int responseCount = 0;
         private SifParser sifParser = SifParser.NewInstance();
         private StudentPersonal studentPersonal;
 
         /// <summary>
-        /// Create an instance using the SIFWorks ADK configuration file.
+        /// Create an instance using the Agent configuration file.
         /// </summary>
         /// <param name="agentConfig">Configuration file for the SIF Agent.</param>
-        public XmlFileIterator(AgentConfig agentConfig)
+        /// <exception cref="System.ArgumentException">agentConfig parameter is null.</exception>
+        /// <exception cref="Systemic.Sif.Framework.Publisher.IteratorException">Error parsing student details from the Agent configuration file.</exception>
+        public StudentPersonalIterator(AgentConfig agentConfig)
         {
+
+            if (agentConfig == null)
+            {
+                throw new ArgumentException("agentConfig parameter is null.");
+            }
+
             Mappings mappings = agentConfig.Mappings.GetMappings("Default");
 
             if (mappings == null)
             {
-                throw new IteratorException("<mappings id=\"Default\"> has not been specified for agent " + agentConfig.SourceId + ".");
+                throw new IteratorException("<mappings id=\"Default\"> has not been specified for Agent " + agentConfig.SourceId + ".");
             }
 
             objectMapping = mappings.GetObjectMapping(typeof(StudentPersonal).Name, true);
+
+            if (objectMapping == null)
+            {
+                throw new IteratorException("An object mapping for StudentPersonal has not been specified for Agent " + agentConfig.SourceId + ".");
+            }
+
             string xml = objectMapping.XmlElement.InnerXml;
-            if (log.IsDebugEnabled) log.Debug("Object mapping is: " + objectMapping.XmlElement.InnerXml);
             IElementDef elementDef = Adk.Dtd.LookupElementDef(objectMapping.ObjectType);
-            studentPersonal = (StudentPersonal)sifParser.Parse(xml);
+
+            try
+            {
+                studentPersonal = (StudentPersonal)sifParser.Parse(xml);
+            }
+            catch (AdkParsingException e)
+            {
+                throw new IteratorException("The following event message from StudentPersonalIterator has parsing errors: " + xml + ".", e);
+            }
+
         }
 
         /// <summary>
@@ -86,41 +111,51 @@ namespace Systemic.Sif.Demo.Publishing.XmlFile
         }
 
         /// <summary>
-        /// Simply return the StudentPersonal from the XML string representation.
+        /// Simply return the StudentPersonal read from the Agent configuration file.
         /// </summary>
         /// <returns>The next SIF Event.</returns>
         public SifEvent<StudentPersonal> GetNextEvent()
         {
-            eventCount++;
+            if (log.IsDebugEnabled) log.Debug("Next StudentPersonal event record:\n" + studentPersonal.ToXml());
+            eventMessageCount++;
             return new SifEvent<StudentPersonal>(studentPersonal, EventAction.Change);
         }
 
         /// <summary>
-        /// Simply return the StudentPersonal from the XML string representation.
+        /// Simply return the StudentPersonal read from the Agent configuration file.
         /// </summary>
         /// <returns>The next response.</returns>
         public StudentPersonal GetNextResponse()
         {
-            responseCount++;
+            if (log.IsDebugEnabled) log.Debug("Next StudentPersonal response record:\n" + studentPersonal.ToXml());
+            responseMessageCount++;
             return studentPersonal;
         }
 
         /// <summary>
-        /// Implemented to return True once only.
+        /// If the onceOnly flag is True, then return True for each message read from the Agent configuration file.
+        /// If the onceOnly flag is False, then always return True.
         /// </summary>
         /// <returns>True if there are further events; false otherwise.</returns>
         public bool HasNextEvent()
         {
-            return (eventCount == 0);
+            bool hasNext = (eventMessageCount < 1);
+
+            if (!onceOnly && !hasNext)
+            {
+                eventMessageCount = 0;
+            }
+
+            return hasNext;
         }
 
         /// <summary>
-        /// Implemented to return True once only.
+        /// This method will return True for each message read from the Agent configuration file.
         /// </summary>
         /// <returns>True if there are further responses; false otherwise.</returns>
         public bool HasNextResponse()
         {
-            return (responseCount == 0);
+            return responseMessageCount < 1;
         }
 
     }

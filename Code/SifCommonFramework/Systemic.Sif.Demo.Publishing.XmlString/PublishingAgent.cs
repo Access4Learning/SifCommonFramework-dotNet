@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright 2010-2011 Systemic Pty Ltd
+* Copyright 2010-2013 Systemic Pty Ltd
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -14,9 +14,6 @@
 */
 
 using System;
-using System.Collections.Generic;
-using Systemic.Sif.Framework.Agent;
-using Systemic.Sif.Framework.Publisher;
 
 namespace Systemic.Sif.Demo.Publishing.XmlString
 {
@@ -24,7 +21,7 @@ namespace Systemic.Sif.Demo.Publishing.XmlString
     /// <summary>
     /// This SIF Agent provides an example implementation of a publishing Agent from the SIF Common Framework.
     /// </summary>
-    class DemoPublishingAgent : PublishingAgent
+    class PublishingAgent : Systemic.Sif.Framework.Agent.PublishingAgent
     {
         // Create a logger for use in this class.
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -32,7 +29,7 @@ namespace Systemic.Sif.Demo.Publishing.XmlString
         /// <summary>
         /// Simply call the default constructor of the super class.
         /// </summary>
-        public DemoPublishingAgent()
+        public PublishingAgent()
             : base() 
         {
         }
@@ -41,22 +38,9 @@ namespace Systemic.Sif.Demo.Publishing.XmlString
         /// Define the configuration file used for creating this instance.
         /// </summary>
         /// <param name="cfgFileName">Configuration file associated with this SIF Agent.</param>
-        public DemoPublishingAgent(String cfgFileName)
+        public PublishingAgent(String cfgFileName)
             : base(cfgFileName)
         {
-        }
-
-        /// <summary>
-        /// Simply create a Publisher for StudentPersonal.
-        /// </summary>
-        /// <returns>StudentPersonal Publisher.</returns>
-        public override IList<IBasePublisher> GetPublishers()
-        {
-            IList<IBasePublisher> publishers = new List<IBasePublisher>();
-            StudentPersonalPublisher studentPersonalPublisher = new StudentPersonalPublisher();
-            studentPersonalPublisher.AgentConfiguration = AgentConfiguration;
-            publishers.Add(studentPersonalPublisher);
-            return publishers;
         }
 
         /// <summary>
@@ -65,16 +49,16 @@ namespace Systemic.Sif.Demo.Publishing.XmlString
         /// <param name="args">Command line arguments.</param>
         static void Main(string[] args)
         {
-            DemoPublishingAgent agent = null;
+            PublishingAgent agent = null;
 
             // Check if the appropriate number of parameters has been passed.
             if (args.Length == 0)
             {
-                agent = new DemoPublishingAgent("PublishingAgent.cfg");
+                agent = new PublishingAgent("PublishingAgent.cfg");
             }
             else if (args.Length == 1)
             {
-                agent = new DemoPublishingAgent(args[0]);
+                agent = new PublishingAgent(args[0]);
             }
             else
             {

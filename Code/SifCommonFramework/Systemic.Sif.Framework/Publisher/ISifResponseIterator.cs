@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright 2010-2011 Systemic Pty Ltd
+* Copyright 2010-2013 Systemic Pty Ltd
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ namespace Systemic.Sif.Framework.Publisher
         void AfterResponse();
 
         /// <summary>
-        /// Pre-processing that occurs before every call to getNextResponse().
+        /// Pre-processing that occurs before every call to GetNextResponse().
         /// </summary>
         /// <exception cref="Systemic.Sif.Framework.Publisher.IteratorException">All errors should be wrapped by this exception.</exception>
         void BeforeResponse();

@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright 2010-2011 Systemic Pty Ltd
+* Copyright 2010-2013 Systemic Pty Ltd
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ namespace Systemic.Sif.Framework.Publisher
         }
 
         /// <summary>
-        /// Constructor that hold an error message and the original exception.
+        /// Constructor that holds an error message and the original exception.
         /// </summary>
         /// <param name="message">Message associated with the exception.</param>
         /// <param name="inner">Original exception.</param>

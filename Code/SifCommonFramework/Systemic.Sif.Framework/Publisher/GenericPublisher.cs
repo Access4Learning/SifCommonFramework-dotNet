@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright 2010-2011 Systemic Pty Ltd
+* Copyright 2010-2013 Systemic Pty Ltd
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -31,6 +31,8 @@ namespace Systemic.Sif.Framework.Publisher
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private AgentConfig agentConfig;
+        
+        protected AgentProperties agentProperties = new AgentProperties(null);
 
         /// <summary>
         /// The configuration information associated with the Agent for this Publisher.
@@ -38,7 +40,13 @@ namespace Systemic.Sif.Framework.Publisher
         public AgentConfig AgentConfiguration
         {
             get { return agentConfig; }
-            set { agentConfig = value; }
+
+            set
+            {
+                agentConfig = value;
+                agentConfig.GetAgentProperties(agentProperties);
+            }
+
         }
 
         /// <summary>
@@ -52,16 +60,36 @@ namespace Systemic.Sif.Framework.Publisher
         /// <summary>
         /// This method is used to set the frequency (in milliseconds) that SIF Events will be broadcast. If this
         /// value is 0 (or less), no SIF Events will ever be broadcast.
+        /// Default implementation returns 1 hour if no event frequency is defined.
         /// </summary>
-        public abstract int EventFrequency { get; set; }
+        public virtual int EventFrequency
+        {
+            get { return agentProperties.GetProperty("publisher." + SifObjectType.Name + ".eventFrequency", 3600000); }
+            set { }
+        }
 
+        /// <summary>
+        /// Create an instance of the Publisher without referencing the Agent configuration settings.
+        /// </summary>
         public GenericPublisher()
         {
         }
 
+        /// <summary>
+        /// Create an instance of the Publisher based upon the Agent configuration settings.
+        /// </summary>
+        /// <param name="agentConfig">Agent configuration settings.</param>
+        /// <exception cref="System.ArgumentException">agentConfig parameter is null.</exception>
         public GenericPublisher(AgentConfig agentConfig)
         {
-            this.agentConfig = agentConfig;
+
+            if (agentConfig == null)
+            {
+                throw new ArgumentException("agentConfig parameter is null.");
+            }
+
+            AgentConfiguration = agentConfig;
+            AgentConfiguration.GetAgentProperties(agentProperties);
         }
 
         /// <summary>
@@ -128,28 +156,37 @@ namespace Systemic.Sif.Framework.Publisher
 
                         while (iterator.HasNextEvent())
                         {
-                            SifEvent<T> sifEvent = iterator.GetNextEvent();
+                            SifEvent<T> sifEvent = null;
 
-                            // This should not return null since the hasNext() returned true, but just in case we check
-                            // and exit the loop if it should return null. In this case we assume that there is no more
-                            // data. We also log an warning to make the coder aware of the issue.
-                            if (sifEvent == null)
+                            try
                             {
-                                if (log.IsWarnEnabled) log.Warn("iterator.hasNext() has returned true but iterator.getNext() has returned null => no further SIF Events are broadcast.");
-                            }
-                            else
-                            {
+                                sifEvent = iterator.GetNextEvent();
 
-                                try
+                                if (sifEvent == null)
                                 {
-                                    BroadcastEvent(sifEvent, zone);
-                                    successCount++;
-                                }
-                                catch (PublisherException)
-                                {
+                                    if (log.IsWarnEnabled) log.Warn("iterator.hasNextEvent() has returned True, but iterator.getNextEvent() has returned null. The SIF Event has been ignored.");
                                     failureCount++;
                                 }
+                                else
+                                {
 
+                                    try
+                                    {
+                                        BroadcastEvent(sifEvent, zone);
+                                        successCount++;
+                                    }
+                                    catch (PublisherException)
+                                    {
+                                        failureCount++;
+                                    }
+
+                                }
+
+                            }
+                            catch (Exception e)
+                            {
+                                if (log.IsWarnEnabled) log.Warn("SIF Event has been ignored because iterator.getNextEvent() failed.", e);
+                                failureCount++;
                             }
 
                         }
@@ -209,31 +246,39 @@ namespace Systemic.Sif.Framework.Publisher
 
                     while (iterator.HasNextResponse())
                     {
-                        T sifDataObject = iterator.GetNextResponse();
+                        T sifDataObject = null;
 
-                        // This should not return null since the hasNext() returned true, but just in case we check
-                        // and exit the loop if it should return null. In this case we assume that there is no more
-                        // data. We also log an warning to make the coder aware of the issue.
-                        if (sifDataObject == null)
+                        try
                         {
-                            if (log.IsWarnEnabled) log.Warn("iterator.GetNextResponse() has returned true but iterator.GetNextResponse() has returned null => no further SIF Data Objects are sent.");
-                            break;
-                        }
-                        else
-                        {
+                            sifDataObject = iterator.GetNextResponse();
 
-                            try
+                            if (sifDataObject == null)
                             {
-                                // Write the SIF Data Object to the zone via the output stream.
-                                outStream.Write(sifDataObject);
-                                successCount++;
-                            }
-                            catch (Exception e)
-                            {
+                                if (log.IsWarnEnabled) log.Warn("iterator.GetNextResponse() has returned True, but iterator.GetNextResponse() has returned null. The SIF Data Object has been ignored.");
                                 failureCount++;
-                                if (log.IsErrorEnabled) log.Error("The requested SIF Data Object ...\n" + sifDataObject.ToXml() + "\nwas not sent because it returned the following error ...\n" + e.Message, e); ;
+                            }
+                            else
+                            {
+
+                                try
+                                {
+                                    // Write the SIF Data Object to the zone via the output stream.
+                                    outStream.Write(sifDataObject);
+                                    successCount++;
+                                }
+                                catch (Exception e)
+                                {
+                                    failureCount++;
+                                    if (log.IsErrorEnabled) log.Error("The requested SIF Data Object ...\n" + sifDataObject.ToXml() + "\nwas not sent because it returned the following error ...\n" + e.Message, e); ;
+                                }
+
                             }
 
+                        }
+                        catch (Exception e)
+                        {
+                            if (log.IsWarnEnabled) log.Warn("SIF Response has been ignored because iterator.getNextResponse() failed.", e);
+                            failureCount++;
                         }
 
                     }

@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright 2010-2011 Systemic Pty Ltd
+* Copyright 2010-2013 Systemic Pty Ltd
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -13,6 +13,7 @@
 * See the License for the specific language governing permissions and limitations under the License.
 */
 
+using System;
 using System.Timers;
 using OpenADK.Library;
 using OpenADK.Library.Infra;
@@ -31,7 +32,8 @@ namespace Systemic.Sif.Framework.Subscriber
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         private AgentConfig agentConfig;
-        private string applicationId;
+
+        protected AgentProperties agentProperties = new AgentProperties(null);
 
         /// <summary>
         /// The configuration information associated with the Agent for this Subscriber.
@@ -39,16 +41,13 @@ namespace Systemic.Sif.Framework.Subscriber
         public AgentConfig AgentConfiguration
         {
             get { return agentConfig; }
-            set { agentConfig = value; }
-        }
 
-        /// <summary>
-        /// Unique identfier for the application associated with the Agent for this Subscriber.
-        /// </summary>
-        public string ApplicationId
-        {
-            get { return applicationId; }
-            set { applicationId = value; }
+            set
+            {
+                agentConfig = value;
+                agentConfig.GetAgentProperties(agentProperties);
+            }
+
         }
 
         /// <summary>
@@ -59,13 +58,28 @@ namespace Systemic.Sif.Framework.Subscriber
             get { return (new T()).ObjectType; }
         }
 
+        /// <summary>
+        /// Create an instance of the Subscriber without referencing the Agent configuration settings.
+        /// </summary>
         public GenericSubscriber()
         {
         }
 
+        /// <summary>
+        /// Create an instance of the Subscriber based upon the Agent configuration settings.
+        /// </summary>
+        /// <param name="agentConfig">Agent configuration settings.</param>
+        /// <exception cref="System.ArgumentException">agentConfig parameter is null.</exception>
         public GenericSubscriber(AgentConfig agentConfig)
         {
-            this.agentConfig = agentConfig;
+
+            if (agentConfig == null)
+            {
+                throw new ArgumentException("agentConfig parameter is null.");
+            }
+
+            AgentConfiguration = agentConfig;
+            AgentConfiguration.GetAgentProperties(agentProperties);
         }
 
         /// <summary>
@@ -92,8 +106,13 @@ namespace Systemic.Sif.Framework.Subscriber
         /// <summary>
         /// This method is used to set the frequency (in milliseconds) that a call to MakeRequest(IZone) will be made.
         /// If this value is 0 (or less), no requests for SIF data will ever be made.
+        /// Default implementation returns 0 if no request frequency is defined.
         /// </summary>
-        protected abstract int RequestFrequency { get; set; }
+        protected virtual int RequestFrequency
+        {
+            get { return agentProperties.GetProperty("subscriber." + SifObjectType.Name + ".requestFrequency", 0); }
+            set { }
+        }
 
         /// <summary>
         /// This method can be overwritten to specify further query conditions for a SIF Request. The Query
@@ -131,7 +150,7 @@ namespace Systemic.Sif.Framework.Subscriber
             // Check if a SIF Request needs to be made at this point in time.
             if (MakeRequest(zone))
             {
-                if (log.IsDebugEnabled) log.Debug("Making a request for " + SifObjectType.Name + " in zone " + zone.ZoneId);
+                if (log.IsDebugEnabled) log.Debug("Making a request for " + SifObjectType.Name + " in zone " + zone.ZoneId + ".");
                 // Create a Query for the SIF Data Object type.
                 Query query = new Query(SifObjectType);
                 // Without this, an error occurs.
@@ -184,13 +203,12 @@ namespace Systemic.Sif.Framework.Subscriber
         }
 
         /// <summary>
-        /// This method from the SIFWorks ADK has no specific implemention within this framework, but may be
+        /// This method from the OpenADK has no specific implemention within this framework, but may be
         /// overridden as required.
         /// </summary>
         /// <see cref="Edustructures.SifWorks.IQueryResults#OnQueryPending(Edustructures.SifWorks.IMessageInfo, Edustructures.SifWorks.IZone)">OnQueryPending</param>
         public virtual void OnQueryPending(IMessageInfo info, IZone zone)
         {
-            if (log.IsInfoEnabled) log.Info("OnQueryPending() is not currently implemented for Subscriber " + this.GetType().Name + ".");
         }
 
         /// <summary>
@@ -237,7 +255,7 @@ namespace Systemic.Sif.Framework.Subscriber
             }
             else
             {
-                if (log.IsInfoEnabled) log.Info("All requested packets have been received");
+                if (log.IsInfoEnabled) log.Info("All requested packets have been received.");
             }
 
         }

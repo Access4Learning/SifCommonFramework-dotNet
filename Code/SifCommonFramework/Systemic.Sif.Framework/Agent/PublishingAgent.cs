@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright 2010-2011 Systemic Pty Ltd
+* Copyright 2010-2013 Systemic Pty Ltd
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -34,13 +34,17 @@ namespace Systemic.Sif.Framework.Agent
         /// This method returns the Publishers used by this Agent.
         /// </summary>
         /// <returns>Collection of Publishers.</returns>
-        public abstract IList<IBasePublisher> GetPublishers();
+        public virtual IList<IBasePublisher> GetPublishers()
+        {
+            return GetInstances<IBasePublisher>(AgentType.Publisher);
+        }
 
         /// <summary>
         /// This constructor will create a publishing Agent using the default "agent.cfg" file. If this configuration
         /// file does not exist, the Agent will not run when called.
         /// </summary>
-        public PublishingAgent() : base() 
+        public PublishingAgent()
+            : base()
         {
         }
 

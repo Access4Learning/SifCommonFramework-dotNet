@@ -4,7 +4,7 @@ rem ============================================================================
 rem == User defined environment variables                                     ==
 rem ============================================================================
 
-set EXECUTABLE_PATH=\soe\Projects\SifCommonFramework\Code\SifCommonFramework\Systemic.Sif.Demo.Publishing.XmlString\bin\Release\
+set EXECUTABLE_PATH=..\..\Code\SifCommonFramework\Systemic.Sif.Demo.Publishing.XmlString\bin\Release\
 set EXECUTABLE=Systemic.Sif.Demo.Publishing.XmlString.exe
 
 echo EXECUTABLE=%EXECUTABLE_PATH%%EXECUTABLE%
@@ -24,5 +24,5 @@ rem == Start executable
 rem ============================================================================
 
 title %EXECUTABLE%
-start /D %EXECUTABLE_PATH% /WAIT /B %EXECUTABLE%
+start /D %EXECUTABLE_PATH% /WAIT /B %EXECUTABLE% %1
 :end

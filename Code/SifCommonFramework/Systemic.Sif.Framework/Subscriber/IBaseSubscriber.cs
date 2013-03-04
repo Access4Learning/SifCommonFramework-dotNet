@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright 2010-2011 Systemic Pty Ltd
+* Copyright 2010-2013 Systemic Pty Ltd
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 */
 
 using OpenADK.Library;
-using OpenADK.Library.Tools.Cfg;
+using Systemic.Sif.Framework.Agent;
 
 namespace Systemic.Sif.Framework.Subscriber
 {
@@ -22,13 +22,8 @@ namespace Systemic.Sif.Framework.Subscriber
     /// <summary>
     /// This interface defines common methods used by the Agents of this framework.
     /// </summary>
-    public interface IBaseSubscriber : ISubscriber, IQueryResults
+    public interface IBaseSubscriber : IAgentSettings, ISubscriber, IQueryResults
     {
-
-        /// <summary>
-        /// The configuration information associated with the Agent for this Subscriber.
-        /// </summary>
-        AgentConfig AgentConfiguration { get; set; }
 
         /// <summary>
         /// The SIF Data Object type associated with this Subscriber.

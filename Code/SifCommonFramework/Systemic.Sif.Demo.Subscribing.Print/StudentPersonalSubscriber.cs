@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright 2010-2011 Systemic Pty Ltd
+* Copyright 2010-2013 Systemic Pty Ltd
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -29,16 +29,18 @@ namespace Systemic.Sif.Demo.Subscribing.Print
         // Create a logger for use in this class.
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        int requestFrequency = 30000;
+        private static int requestCount = 0;
+
+        private const int maxRequests = 2;
 
         /// <summary>
-        /// This implementation will always make a request.
+        /// This method returns true on the first 2 calls; false on subsequent calls.
         /// </summary>
         /// <param name="zone">Zone the request will be made to.</param>
-        /// <returns>True is a request is to be made; false otherwise.</returns>
+        /// <returns>True if a request is to be made; false otherwise.</returns>
         protected override bool MakeRequest(IZone zone)
         {
-            return true;
+            return requestCount++ < maxRequests;
         }
 
         /// <summary>
@@ -61,15 +63,6 @@ namespace Systemic.Sif.Demo.Subscribing.Print
         {
             if (log.IsDebugEnabled) log.Debug(sifDataObject.ToXml());
             if (log.IsDebugEnabled) log.Debug("Received a request response for StudentPersonal in Zone " + zone.ZoneId + ".");
-        }
-
-        /// <summary>
-        /// This implementation will define a request frequency of 30 seconds.
-        /// </summary>
-        protected override int RequestFrequency
-        {
-            get { return requestFrequency; }
-            set { requestFrequency = value; }
         }
 
     }

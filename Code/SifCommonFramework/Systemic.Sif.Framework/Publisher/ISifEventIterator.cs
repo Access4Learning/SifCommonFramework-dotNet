@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright 2010-2011 Systemic Pty Ltd
+* Copyright 2010-2013 Systemic Pty Ltd
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -27,13 +27,13 @@ namespace Systemic.Sif.Framework.Publisher
     {
 
         /// <summary>
-        /// Post-processing that occurs after every call to getNextEvent().
+        /// Post-processing that occurs after every call to GetNextEvent().
         /// </summary>
         /// <exception cref="Systemic.Sif.Framework.Publisher.IteratorException">All errors should be wrapped by this exception.</exception>
         void AfterEvent();
 
         /// <summary>
-        /// Pre-processing that occurs before every call to getNextEvent().
+        /// Pre-processing that occurs before every call to GetNextEvent().
         /// </summary>
         /// <exception cref="Systemic.Sif.Framework.Publisher.IteratorException">All errors should be wrapped by this exception.</exception>
         void BeforeEvent();
@@ -46,7 +46,7 @@ namespace Systemic.Sif.Framework.Publisher
         SifEvent<T> GetNextEvent();
 
         /// <summary>
-        /// This method will check whether there are more SIF Events available, i.e. a call to getNextEvent() will not
+        /// This method will check whether there are more SIF Events available, i.e. a call to GetNextEvent() will not
         /// return null.
         /// </summary>
         /// <returns>True if there are more SIF Events available; False otherwise.</returns>

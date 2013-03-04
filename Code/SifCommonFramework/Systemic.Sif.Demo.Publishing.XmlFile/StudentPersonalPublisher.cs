@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright 2010-2011 Systemic Pty Ltd
+* Copyright 2010-2013 Systemic Pty Ltd
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -25,16 +25,6 @@ namespace Systemic.Sif.Demo.Publishing.XmlFile
     /// </summary>
     public class StudentPersonalPublisher : GenericPublisher<StudentPersonal>
     {
-        int eventFrequency = 20000;
-
-        /// <summary>
-        /// This implementation will define an event frequency of 20 seconds.
-        /// </summary>
-        public override int EventFrequency
-        {
-            get { return eventFrequency; }
-            set { eventFrequency = value; }
-        }
 
         /// <summary>
         /// Return a StudentPersonal iterator.
@@ -42,7 +32,7 @@ namespace Systemic.Sif.Demo.Publishing.XmlFile
         /// <returns>StudentPersonal iterator.</returns>
         public override ISifEventIterator<StudentPersonal> GetSifEvents()
         {
-            return new XmlFileIterator(AgentConfiguration);
+            return new StudentPersonalIterator(AgentConfiguration);
         }
 
         /// <summary>
@@ -53,7 +43,7 @@ namespace Systemic.Sif.Demo.Publishing.XmlFile
         /// <returns>StudentPersonal iterator.</returns>
         public override ISifResponseIterator<StudentPersonal> GetSifResponses(Query query, IZone zone)
         {
-            return new XmlFileIterator(AgentConfiguration);
+            return new StudentPersonalIterator(AgentConfiguration);
         }
 
     }

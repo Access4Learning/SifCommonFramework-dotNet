@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright 2010-2011 Systemic Pty Ltd
+* Copyright 2010-2013 Systemic Pty Ltd
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -14,10 +14,13 @@
 */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using OpenADK.Library;
 using OpenADK.Library.Tools.Cfg;
 using OpenADK.Util;
+using Systemic.Sif.Framework.Util;
 
 namespace Systemic.Sif.Framework.Agent
 {
@@ -25,7 +28,7 @@ namespace Systemic.Sif.Framework.Agent
     /// <summary>
     /// SIF Agent for managing Publishers and Subscribers.
     /// </summary>
-    public abstract class BaseAgent : OpenADK.Library.Agent
+    public abstract class BaseAgent : OpenADK.Library.Agent, IAgentSettings
     {
         // Create a logger for use in this class.
         private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
@@ -35,8 +38,10 @@ namespace Systemic.Sif.Framework.Agent
         // Default name of the configuration file associated with this Agent.
         private String cfgFileName = "agent.cfg";
 
+        protected internal enum AgentType { Publisher, Subscriber };
+
         /// <summary>
-        /// The configuration information associated with the Agent for this Publisher.
+        /// The configuration information associated with the Agent.
         /// </summary>
         public AgentConfig AgentConfiguration
         {
@@ -50,6 +55,14 @@ namespace Systemic.Sif.Framework.Agent
         public override string HomeDir
         {
             get { return base.HomeDir + "\\" + Properties.GetProperty("agent.homeSubdir", ""); }
+        }
+
+        /// <summary>
+        /// Locale for this SIF Agent, i.e. AU, UK, US.
+        /// </summary>
+        protected virtual SIFVariant Locale
+        {
+            get { return (agentConfig == null ? SIFVariant.SIF_US : agentConfig.Variant); }
         }
 
         /// <summary>
@@ -83,6 +96,71 @@ namespace Systemic.Sif.Framework.Agent
         }
 
         /// <summary>
+        /// This method returns the Publisher or Subscriber instances used by this Agent.
+        /// </summary>
+        /// <param name="agentType">Indicates whether Publisher or Subscriber instances are returned.</param>
+        /// <returns>Collection of Publishers or Subscribers.</returns>
+        protected internal IList<T> GetInstances<T>(AgentType agentType) where T : IAgentSettings
+        {
+            IList<T> instances = new List<T>();
+            string instanceTypesString = Properties.GetProperty(agentType.ToString().ToLower() + ".types", "");
+            IList<IElementDef> instanceTypes = PropertyUtils.ParseElementDefinitions(instanceTypesString);
+
+            foreach (IElementDef instanceType in instanceTypes)
+            {
+                string instanceString = Properties.GetProperty(agentType.ToString().ToLower() + "." + instanceType.Name + ".implementation", null);
+
+                if (!String.IsNullOrEmpty(instanceString))
+                {
+                    string assemblyName = PropertyUtils.ParseAssemblyName(instanceString);
+                    string className = PropertyUtils.ParseClassName(instanceString);
+
+                    try
+                    {
+
+                        if (!String.IsNullOrEmpty(className))
+                        {
+                            Assembly assembly = null;
+
+                            if (String.IsNullOrEmpty(assemblyName))
+                            {
+                                assembly = Assembly.GetEntryAssembly();
+                            }
+                            else
+                            {
+                                assembly = Assembly.LoadFrom(assemblyName);
+                            }
+
+                            if (assembly != null)
+                            {
+                                // Create an instance of the Publisher or Subscriber.
+                                Type type = assembly.GetType(className);
+                                T instance = (T)Activator.CreateInstance(type);
+                                instance.AgentConfiguration = AgentConfiguration;
+                                instances.Add(instance);
+                            }
+
+                        }
+
+                    }
+                    catch (Exception e)
+                    {
+                        if (log.IsErrorEnabled) log.Error("Unable to create an instance of " + agentType.ToString() + " " + className + ".", e);
+                    }
+
+                }
+
+            }
+
+            if (instances.Count == 0)
+            {
+                if (log.IsInfoEnabled) log.Info("No " + agentType.ToString() + "s have been specified for Agent " + this.Id + ".");
+            }
+
+            return instances;
+        }
+
+        /// <summary>
         /// Configure the Agent based on the Agent configuration file, then initialise.
         /// </summary>
         /// <exception cref="System.IO.IOException">File or resource exception occurred, possibly while reading Agent configuration file.</exception>
@@ -96,10 +174,7 @@ namespace Systemic.Sif.Framework.Agent
             }
             else
             {
-                // Initialise the ADK to use the latest SIF version and all SIF Data Object modules?
-                Adk.Initialize();
-
-                AgentConfig agentConfig = new AgentConfig();
+                agentConfig = new AgentConfig();
 
                 try
                 {
@@ -110,6 +185,9 @@ namespace Systemic.Sif.Framework.Agent
                 {
                     throw new IOException("Error reading Agent configuration file " + this.cfgFileName + " when initialising Agent " + this.Id + ".", e);
                 }
+
+                // Initialise the ADK to use the latest SIF version and all SIF Data Object modules?
+                Adk.Initialize(Locale);
 
                 // Override the SourceId passed to the constructor with the SourceID specified in the configuration
                 // file.
@@ -130,7 +208,6 @@ namespace Systemic.Sif.Framework.Agent
                 // Ask the AgentConfig instance to "apply" all configuration settings to this Agent. This includes
                 // parsing and registering all <zone> elements with the Agent's ZoneFactory.
                 agentConfig.Apply(this, true);
-                AgentConfiguration = agentConfig;
 
                 // Set the level of debugging applied to the ADK.
                 if (Properties.GetProperty("agent.debugAll", false))

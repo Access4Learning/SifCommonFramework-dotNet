@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright 2010-2011 Systemic Pty Ltd
+* Copyright 2010-2013 Systemic Pty Ltd
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -34,13 +34,17 @@ namespace Systemic.Sif.Framework.Agent
         /// This method returns the Subscribers used by this Agent.
         /// </summary>
         /// <returns>Collection of Subscribers.</returns>
-        public abstract IList<IBaseSubscriber> GetSubscribers();
+        public virtual IList<IBaseSubscriber> GetSubscribers()
+        {
+            return GetInstances<IBaseSubscriber>(AgentType.Subscriber);
+        }
 
         /// <summary>
         /// This constructor will create a subscribing Agent using the default "agent.cfg" file. If this configuration
         /// file does not exist, the Agent will not run when called.
         /// </summary>
-        public SubscribingAgent() : base() 
+        public SubscribingAgent()
+            : base()
         {
         }
 

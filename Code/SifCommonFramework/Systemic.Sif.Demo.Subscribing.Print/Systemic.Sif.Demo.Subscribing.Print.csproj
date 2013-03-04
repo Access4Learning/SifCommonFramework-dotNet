@@ -35,34 +35,74 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Systemic.Sif.Demo.Subscribing.Print.DemoSubscribingAgent</StartupObject>
+    <StartupObject>Systemic.Sif.Demo.Subscribing.Print.SubscribingAgent</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\SharedLibs\OpenADK.Net-x.0.0.0-AU\log4net.dll</HintPath>
+      <HintPath>..\..\..\SharedLibs\OpenADK.Net-2.1.0\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="OpenADK.Core">
-      <HintPath>..\..\..\..\..\SharedLibs\OpenADK.Net-x.0.0.0-AU\OpenADK.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenADK.SDO-AU">
-      <HintPath>..\..\..\..\..\SharedLibs\OpenADK.Net-x.0.0.0-AU\OpenADK.SDO-AU.dll</HintPath>
-    </Reference>
-    <Reference Include="Org.Mentalis.Security, Version=1.0.15.16972, Culture=neutral, PublicKeyToken=89e54375eaf00612, processorArchitecture=MSIL">
+    <Reference Include="OpenADK.Core, Version=9.2.4.12, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\SharedLibs\OpenADK.Net-x.0.0.0-AU\Org.Mentalis.Security.dll</HintPath>
+      <HintPath>..\..\..\SharedLibs\OpenADK.Net-2.1.0\OpenADK.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenADK.SDO-AU, Version=9.2.4.12, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SharedLibs\OpenADK.Net-2.1.0\OpenADK.SDO-AU.dll</HintPath>
+    </Reference>
+    <Reference Include="Org.Mentalis.Security, Version=1.0.14.25108, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SharedLibs\OpenADK.Net-2.1.0\Org.Mentalis.Security.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DemoSubscribingAgent.cs" />
+    <Compile Include="SchoolInfoSubscriber.cs" />
+    <Compile Include="StaffPersonalSubscriber.cs" />
+    <Compile Include="SubscribingAgent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StudentPersonalSubscriber.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="UseCases\UseCase009.SubscribingAgent.cfg">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="UseCases\UseCase008.SubscribingAgent.cfg">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="UseCases\UseCase007.SubscribingAgent.cfg">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="UseCases\UseCase006.SubscribingAgent.cfg">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="UseCases\UseCase005.SubscribingAgent.cfg">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="UseCases\UseCase004.SubscribingAgent.cfg">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="UseCases\UseCase002.SubscribingAgent.cfg">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="UseCases\UseCase003.SubscribingAgent.cfg">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="UseCases\UseCase001.SubscribingAgent.cfg">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="SubscribingAgent.cfg">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

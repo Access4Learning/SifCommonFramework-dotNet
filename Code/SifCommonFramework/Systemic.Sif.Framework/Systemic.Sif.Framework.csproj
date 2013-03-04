@@ -34,17 +34,19 @@
   <ItemGroup>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\SharedLibs\OpenADK.Net-x.0.0.0-AU\log4net.dll</HintPath>
+      <HintPath>..\..\..\SharedLibs\OpenADK.Net-2.1.0\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="OpenADK.Core">
-      <HintPath>..\..\..\..\..\SharedLibs\OpenADK.Net-x.0.0.0-AU\OpenADK.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenADK.SDO-AU">
-      <HintPath>..\..\..\..\..\SharedLibs\OpenADK.Net-x.0.0.0-AU\OpenADK.SDO-AU.dll</HintPath>
-    </Reference>
-    <Reference Include="Org.Mentalis.Security, Version=1.0.15.16972, Culture=neutral, PublicKeyToken=89e54375eaf00612, processorArchitecture=MSIL">
+    <Reference Include="OpenADK.Core, Version=9.2.4.12, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\SharedLibs\OpenADK.Net-x.0.0.0-AU\Org.Mentalis.Security.dll</HintPath>
+      <HintPath>..\..\..\SharedLibs\OpenADK.Net-2.1.0\OpenADK.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenADK.SDO-AU, Version=9.2.4.12, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SharedLibs\OpenADK.Net-2.1.0\OpenADK.SDO-AU.dll</HintPath>
+    </Reference>
+    <Reference Include="Org.Mentalis.Security, Version=1.0.14.25108, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SharedLibs\OpenADK.Net-2.1.0\Org.Mentalis.Security.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -52,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Agent\BaseAgent.cs" />
+    <Compile Include="Agent\IAgentSettings.cs" />
     <Compile Include="Agent\SubscribingAgent.cs" />
     <Compile Include="Agent\PublishingAgent.cs" />
     <Compile Include="Publisher\PublisherException.cs" />
@@ -67,6 +70,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\SifEvent.cs" />
     <Compile Include="Agent\DoubleAgent.cs" />
+    <Compile Include="Util\PropertyUtils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
