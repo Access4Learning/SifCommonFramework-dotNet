@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Systemic.Sif.Demo.Publishin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Systemic.Sif.Demo.Publishing.Database", "Systemic.Sif.Demo.Publishing.Database\Systemic.Sif.Demo.Publishing.Database.csproj", "{4576C18C-6D7C-402F-825A-2371EC18A266}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Systemic.Sif.Test.Fixture", "Systemic.Sif.Test.Fixture\Systemic.Sif.Test.Fixture.csproj", "{61A023F7-A3BB-4DA2-A021-DF8D094E4637}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,16 @@ Global
 		{4576C18C-6D7C-402F-825A-2371EC18A266}.Release|Mixed Platforms.Build.0 = Release|x86
 		{4576C18C-6D7C-402F-825A-2371EC18A266}.Release|x86.ActiveCfg = Release|x86
 		{4576C18C-6D7C-402F-825A-2371EC18A266}.Release|x86.Build.0 = Release|x86
+		{61A023F7-A3BB-4DA2-A021-DF8D094E4637}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61A023F7-A3BB-4DA2-A021-DF8D094E4637}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61A023F7-A3BB-4DA2-A021-DF8D094E4637}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{61A023F7-A3BB-4DA2-A021-DF8D094E4637}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{61A023F7-A3BB-4DA2-A021-DF8D094E4637}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{61A023F7-A3BB-4DA2-A021-DF8D094E4637}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61A023F7-A3BB-4DA2-A021-DF8D094E4637}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61A023F7-A3BB-4DA2-A021-DF8D094E4637}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{61A023F7-A3BB-4DA2-A021-DF8D094E4637}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{61A023F7-A3BB-4DA2-A021-DF8D094E4637}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
