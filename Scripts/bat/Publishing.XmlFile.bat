@@ -4,7 +4,7 @@ rem ============================================================================
 rem == User defined environment variables                                     ==
 rem ============================================================================
 
-set EXECUTABLE_PATH=..\..\Code\SifCommonFramework\Systemic.Sif.Demo.Publishing.XmlFile\bin\Release\
+set EXECUTABLE_PATH=..\..\Code\SifCommonFramework\Systemic.Sif.Demo.Publishing.XmlFile\bin\Debug\
 set EXECUTABLE=Systemic.Sif.Demo.Publishing.XmlFile.exe
 
 echo EXECUTABLE=%EXECUTABLE_PATH%%EXECUTABLE%
