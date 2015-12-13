@@ -160,6 +160,7 @@ namespace Systemic.Sif.Framework.Publisher
 
                             try
                             {
+                                iterator.BeforeEvent();
                                 sifEvent = iterator.GetNextEvent();
 
                                 if (sifEvent == null)
@@ -182,6 +183,7 @@ namespace Systemic.Sif.Framework.Publisher
 
                                 }
 
+                                iterator.AfterEvent();
                             }
                             catch (Exception e)
                             {
@@ -203,7 +205,6 @@ namespace Systemic.Sif.Framework.Publisher
 
                     }
 
-                    iterator.AfterEvent();
                 }
                 catch (IteratorException e)
                 {

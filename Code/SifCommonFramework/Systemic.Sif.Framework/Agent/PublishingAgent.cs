@@ -58,6 +58,15 @@ namespace Systemic.Sif.Framework.Agent
         }
 
         /// <summary>
+        /// This method will run the SIF Agent and Unprovide on shut down. Only the first call to this method will be
+        /// recognised; subsequent calls will be ignored.
+        /// </summary>
+        public override void Run()
+        {
+            Run(ProvisioningFlags.Unprovide);
+        }
+
+        /// <summary>
         /// Connect to the Zones and configure the Publisher.
         /// </summary>
         /// <exception cref="System.InvalidOperationException">The Agent has not been initialised first.</exception>

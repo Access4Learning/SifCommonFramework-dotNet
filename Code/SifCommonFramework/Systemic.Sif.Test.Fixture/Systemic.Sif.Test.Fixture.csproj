@@ -41,14 +41,17 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\SharedLibs\NUnit-2.5.10.11092\2.0\Framework\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="OpenADK.Core">
-      <HintPath>..\..\..\SharedLibs\OpenADK.Net-2.2.0\OpenADK.Core.dll</HintPath>
+    <Reference Include="OpenADK.Core, Version=9.2.4.12, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SharedLibs\OpenADK.Net-2.3.0\OpenADK.Core.dll</HintPath>
     </Reference>
-    <Reference Include="OpenADK.SDO-AU">
-      <HintPath>..\..\..\SharedLibs\OpenADK.Net-2.2.0\OpenADK.SDO-AU.dll</HintPath>
+    <Reference Include="OpenADK.SDO-AU, Version=9.2.4.12, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SharedLibs\OpenADK.Net-2.3.0\OpenADK.SDO-AU.dll</HintPath>
     </Reference>
-    <Reference Include="OpenADK.SDO-US">
-      <HintPath>..\..\..\SharedLibs\OpenADK.Net-2.2.0\OpenADK.SDO-US.dll</HintPath>
+    <Reference Include="OpenADK.SDO-US, Version=9.2.4.12, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\SharedLibs\OpenADK.Net-2.3.0\OpenADK.SDO-US.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

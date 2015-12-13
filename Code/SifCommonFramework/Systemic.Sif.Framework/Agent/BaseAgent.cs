@@ -248,10 +248,19 @@ namespace Systemic.Sif.Framework.Agent
         }
 
         /// <summary>
-        /// This method will run the SIF Agent. Only the first call to this method will be recognised; subsequent
-        /// calls will be ignored.
+        /// This method will run the SIF Agent and Unregister on shut down. Only the first call to this method will be
+        /// recognised; subsequent calls will be ignored.
         /// </summary>
-        public void Run()
+        public virtual void Run()
+        {
+            this.Run(ProvisioningFlags.Unregister);
+        }
+
+        /// <summary>
+        /// This method will run the SIF Agent and shut down based upon the provisioning flag specified.
+        /// </summary>
+        /// <param name="provisioningFlag">Flag to indicate how to shut down.</param>
+        protected void Run(ProvisioningFlags provisioningFlag)
         {
 
             try
@@ -259,7 +268,7 @@ namespace Systemic.Sif.Framework.Agent
                 Initialize();
                 Console.WriteLine(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType + " is running (press Ctrl-C to stop)...");
                 AdkConsoleWait adkConsoleWait = new AdkConsoleWait();
-                adkConsoleWait.Exiting += delegate { Shutdown(ProvisioningFlags.Unprovide); };
+                adkConsoleWait.Exiting += delegate { Shutdown(provisioningFlag); };
                 adkConsoleWait.WaitForExit();
             }
             catch (AdkConfigException e)
@@ -284,7 +293,7 @@ namespace Systemic.Sif.Framework.Agent
             }
             finally
             {
-                Shutdown(ProvisioningFlags.Unprovide);
+                Shutdown(provisioningFlag);
             }
 
         }
@@ -303,7 +312,7 @@ namespace Systemic.Sif.Framework.Agent
                 // NOTE: There is no reference to an exception in the documentation.
                 try
                 {
-                    base.Shutdown(ProvisioningFlags.Unprovide);
+                    base.Shutdown(provisioningOptions);
                     if (log.IsDebugEnabled) log.Debug("Successfully shutdown Agent " + this.Id + ".");
                 }
                 catch (AdkException e)
