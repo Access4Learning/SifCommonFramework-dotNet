@@ -76,6 +76,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IdentityIterator.cs" />
+    <Compile Include="IdentityPublisher.cs" />
     <Compile Include="SchoolInfoPublisher.cs" />
     <Compile Include="SchoolInfoIterator.cs" />
     <Compile Include="StaffPersonalPublisher.cs" />

@@ -61,6 +61,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IdentitySubscriber.cs" />
     <Compile Include="SchoolInfoSubscriber.cs" />
     <Compile Include="StaffPersonalSubscriber.cs" />
     <Compile Include="SubscribingAgent.cs" />
