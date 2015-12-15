@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright 2010-2013 Systemic Pty Ltd
+* Copyright 2010-2015 Systemic Pty Ltd
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -46,6 +46,32 @@ namespace Systemic.Sif.Framework.Subscriber
             {
                 agentConfig = value;
                 agentConfig.GetAgentProperties(agentProperties);
+            }
+
+        }
+
+        /// <summary>
+        /// Flag to indicate whether this Subscriber should make a
+        /// synchronisation request. If no flag found or flag value is
+        /// invalid, false is returned.
+        /// </summary>
+        protected bool PerformSync
+        {
+
+            get
+            {
+                bool sync;
+
+                try
+                {
+                    sync = agentProperties.GetProperty("subscriber." + SifObjectType.Name + ".performSync", false);
+                }
+                catch (FormatException)
+                {
+                    sync = false;
+                }
+
+                return sync;
             }
 
         }
@@ -307,6 +333,28 @@ namespace Systemic.Sif.Framework.Subscriber
         }
 
         /// <summary>
+        /// This method will send a synchronize Request to all the specified Zones.
+        /// </summary>
+        /// <param name="zones">Zones the synchronize Request will be made to.</param>
+        public void StartSync(IZone[] zones)
+        {
+
+            if (PerformSync)
+            {
+
+                foreach (IZone zone in zones)
+                {
+                    Timer timer = new Timer(5000);
+                    timer.AutoReset = false;
+                    timer.Elapsed += delegate { Sync(zone); };
+                    timer.Start();
+                }
+
+            }
+
+        }
+
+        /// <summary>
         /// Signals this class to begin the syncrhonization process. This class is responsible for querying the zone
         /// for any data it needs to synchronize itself. Unless the AddToSyncQuery(Query) method is overwritten, the
         /// synchronisation will request all SIF Data Objects of the appropriate type.
@@ -314,6 +362,7 @@ namespace Systemic.Sif.Framework.Subscriber
         /// <param name="zone">Zone to synchronise with.</param>
         public virtual void Sync(IZone zone)
         {
+            if (log.IsDebugEnabled) log.Debug("Making a synchronisation request for " + SifObjectType.Name + " in zone " + zone.ZoneId + ".");
             // Create a Query for the SIF Data Object type.
             Query query = new Query(SifObjectType);
             // Without this, an error occurs.

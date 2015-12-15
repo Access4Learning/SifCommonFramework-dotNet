@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright 2010-2013 Systemic Pty Ltd
+* Copyright 2010-2015 Systemic Pty Ltd
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -144,6 +144,22 @@ namespace Systemic.Sif.Framework.Agent
                         catch (AdkException e)
                         {
                             if (log.IsErrorEnabled) log.Error("Error with request processing of Subscriber " + subscriber.GetType().FullName + ".", e);
+                            throw;
+                        }
+
+                    }
+
+                    // Send syncrhonization request for each Subscriber (if required).
+                    foreach (IBaseSubscriber subscriber in subscribers)
+                    {
+
+                        try
+                        {
+                            subscriber.StartSync(zones);
+                        }
+                        catch (AdkException e)
+                        {
+                            if (log.IsErrorEnabled) log.Error("Error with syncrhonization request of Subscriber " + subscriber.GetType().FullName + ".", e);
                             throw;
                         }
 

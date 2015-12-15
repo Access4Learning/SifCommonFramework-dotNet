@@ -1,5 +1,5 @@
 ﻿/*
-* Copyright 2010-2013 Systemic Pty Ltd
+* Copyright 2010-2015 Systemic Pty Ltd
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -35,6 +35,12 @@ namespace Systemic.Sif.Framework.Subscriber
         /// </summary>
         /// <param name="zones">Zones to request from.</param>
         void StartRequestProcessing(IZone[] zones);
+
+        /// <summary>
+        /// This method is used to make syncrhonization requests for SIF Data Objects.
+        /// </summary>
+        /// <param name="zones">Zones to request from.</param>
+        void StartSync(IZone[] zones);
 
     }
 
